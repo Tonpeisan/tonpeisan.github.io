@@ -14,6 +14,34 @@
             });
         })
     }
+    var showOverLay = function () {
+        var overlay = $("<div>").addClass("ongeki_overview").attr("style", "color:black;font-size: 20px;padding-top: 100px;width: 100%; height:200%; text-align: left; position: absolute; top: 0; z-index: 100;background: rgba(0,0,0,0.7);");
+        var textarea = $("<div>").attr("style", "padding:5px;background-color: #FFFFFF;width:40%;height:10%;margin:0 auto;");
+        var imgarea = $("<div>").attr("style", "text-align:center;");
+        var outputimage = $("<img>").attr("src", "https://ongeki-net.com/ongeki-mobile/img/chara/d86ed0051eda05a5.png");
+        var animediv = $("<div>").addClass("ongeki_animetion");
+        textarea.append(animediv);
+        imgarea.append(outputimage);
+        overlay.append(textarea);
+        overlay.append(imgarea);
+        $("body").append(overlay);
+        overlay.show();
+
+        var i = 0
+        loadingAnime = [
+            "loading.",
+            "loading..",
+            "loading...",
+            "loading....",
+            "loading.....",
+            "loading......",
+            "loading.......",
+        ]
+        setInterval(function () {
+            $(".ongeki_animetion").text(loadingAnime[i % loadingAnime.length]);
+            i++
+        }, 200)
+    }
 
     var checkLamp = function(icon){
         let tr_attr = icon[1].getAttribute("src");
@@ -126,7 +154,10 @@
             })
         });    
     }
-
+    //右クリック禁止を解除(ｺﾞﾒﾝﾈ)
+    document.oncontextmenu = '';
+    document.body.oncontextmenu = '';
+    showOverLay();
     getScoreSummary()
     .then(function(doc){
         //console.log(doc);
