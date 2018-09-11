@@ -178,6 +178,12 @@
     //右クリック禁止と長押しメニュー禁止を解除(ｺﾞﾒﾝﾈ)
     $('body').css('-webkit-touch-callout', "");
     $('body').css('-webkit-tap-highlight-color', "");
+    $('img').css('-webkit-touch-callout', "");
+    $('img').css('-webkit-user-select', "");
+    $('img').css('-moz-touch-callout', "");
+    $('img').css('-moz-user-select', "");
+    $('img').css('touch-callout', "");
+    $('img').css('user-select', "");
     document.oncontextmenu = '';
     document.body.oncontextmenu = '';
 
