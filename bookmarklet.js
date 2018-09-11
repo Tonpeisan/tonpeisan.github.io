@@ -183,7 +183,7 @@
     $('img').css('-moz-touch-callout', "");
     $('img').css('-moz-user-select', "");
     $('img').css('touch-callout', "");
-    $('img').css('user-select', "");
+    $('img').css('user-select', "auto");
     document.oncontextmenu = '';
     document.body.oncontextmenu = '';
 
