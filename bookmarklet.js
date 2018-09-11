@@ -18,7 +18,10 @@
         var overlay = $("<div>").addClass("ongeki_overview").attr("style", "color:black;font-size: 20px;padding-top: 100px;width: 100%; height:200%; text-align: left; position: absolute; top: 0; z-index: 100;background: rgba(0,0,0,0.7);");
         var textarea = $("<div>").attr("style", "padding:5px;background-color: #FFFFFF;width:40%;height:10%;margin:0 auto;");
         var imgarea = $("<div>").attr("style", "text-align:center;");
-        var outputimage = $("<img>").attr("src", "https://ongeki-net.com/ongeki-mobile/img/chara/d86ed0051eda05a5.png");
+        var outputimage = $("<canvas>").attr("id", "draw_space");
+        outputimage.attr("width", 375);
+        outputimage.attr("height", 750);
+
         var animediv = $("<div>").addClass("ongeki_animetion");
         textarea.append(animediv);
         imgarea.append(outputimage);
@@ -154,15 +157,37 @@
             })
         });    
     }
+
+    var drawCanvas = function(){
+        return new Promise(function (resolve) {
+            var canvas = document.getElementById("draw_space");
+            if (canvas.getContext){
+                var ctx = canvas.getContext("2d");
+
+                ctx.fillStyle = "rgb(200,0,0)";
+                ctx.fillRect(10, 10, 50, 50);
+
+                ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+                ctx.fillRect(30, 30, 50, 50);
+            }
+            resolve("data");
+        });    
+    }
+
+    //ここから逐次処理
     //右クリック禁止を解除(ｺﾞﾒﾝﾈ)
     document.oncontextmenu = '';
     document.body.oncontextmenu = '';
     showOverLay();
     getScoreSummary()
     .then(function(doc){
-        //console.log(doc);
-    }).then(getPlayerDetail().then(function(doc) {
-        //console.log(doc);        
-    }));
+        console.log("1"); 
+        return getPlayerDetail();
+    }).then(function(doc){
+        console.log("2");
+        return drawCanvas();     
+    }).then(function(data){
+        console.log("finished");
+    });
 }
 )();
