@@ -175,9 +175,12 @@
     }
 
     //ここから逐次処理
-    //右クリック禁止を解除(ｺﾞﾒﾝﾈ)
+    //右クリック禁止と長押しメニュー禁止を解除(ｺﾞﾒﾝﾈ)
+    $('body').css('-webkit-touch-callout', "");
+    $('body').css('-webkit-tap-highlight-color', "");
     document.oncontextmenu = '';
     document.body.oncontextmenu = '';
+
     showOverLay();
     getScoreSummary()
     .then(function(doc){
