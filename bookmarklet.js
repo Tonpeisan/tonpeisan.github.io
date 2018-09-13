@@ -142,13 +142,19 @@
         return [getTechnicalRank(lamp[0]), getFullBell(lamp[1]), getCombo(lamp[2])];
     }
     var getMusicInfo = function(music){
-        let name = music.getElementsByClassName('music_label p_5 break')[0].textContent;
-        let level = music.getElementsByClassName('score_level t_c')[0].textContent;
-        let techscore = music.getElementsByClassName('score_value master_score_value')[2].textContent;
-        techscore = Number(techscore.replace(/,/g,''));
-        let icon = music.getElementsByClassName('music_score_icon_area t_r f_0')[0].getElementsByTagName('img');
-        let lamp = checkLamp(icon);
-        return {name: name, level: level, score: techscore, rank: lamp[0], fb: lamp[1], combo: lamp[2]};
+        try{
+            let name = music.getElementsByClassName('music_label p_5 break')[0].textContent;
+            let level = music.getElementsByClassName('score_level t_c')[0].textContent;
+            let techscore = music.getElementsByClassName('score_value master_score_value')[2].textContent;
+            techscore = Number(techscore.replace(/,/g, ''));
+            let icon = music.getElementsByClassName('music_score_icon_area t_r f_0')[0].getElementsByTagName('img');
+            let lamp = checkLamp(icon);
+            return { name: name, level: level, score: techscore, rank: lamp[0], fb: lamp[1], combo: lamp[2] };
+        }
+        catch (e){
+            console.log("No Play");
+            return -1;
+        }
     }
     var getScoreSummary = function(){
         return new Promise(function(resolve){
@@ -160,7 +166,8 @@
             for (let index=0; index < elements.length; index++){
                 let music = elements[index];
                 let music_info = getMusicInfo(music);
-                music_array.push(music_info)
+                if (music_info != -1)
+                    music_array.push(music_info);
             }
             resolve(music_array);
             })
@@ -180,16 +187,19 @@
     var calcAverageScore = function(data){
         return new Promise(function (resolve) {
             let level_array = ["10", "10+", "11", "11+", "12", "12+", "13", "13+", "14"];
+            // let level_array = ["7+", "8", "8+", "9", "9+", "10", "10+", "11", "11+"];
             var average_array = [];
             for (let i = 0; i < level_array.length; i++) {               
                 var match_data = $.grep(data, function(item, index){
                     return (item.level == level_array[i]);
                 });
                 let score = 0;
-                for(var item in match_data){
-                    score += match_data[item].score;
+                if (match_data.length > 0){
+                    for (var item in match_data) {
+                        score += match_data[item].score;
+                    }
+                    score /= match_data.length;
                 }
-                score /= match_data.length;
                 score = Math.round(score);
                 average_array.push({level: level_array[i], score: score});
             }
